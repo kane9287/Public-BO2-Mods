@@ -3,6 +3,44 @@
 #include scripts\zm\zombies\_zm_utility;
 #include scripts\zm\zombies\_zm;
 
+// Helper functions for dvar defaults since getDvarIntDefault doesn't exist on dedicated servers
+getDvarIntDefault( dvarName, defaultValue )
+{
+	value = getDvarInt( dvarName );
+	if ( !isDefined( value ) || value == 0 && getDvar( dvarName ) == "" )
+	{
+		return defaultValue;
+	}
+	return value;
+}
+
+getDvarFloatDefault( dvarName, defaultValue )
+{
+	value = getDvarFloat( dvarName );
+	if ( !isDefined( value ) || value == 0 && getDvar( dvarName ) == "" )
+	{
+		return defaultValue;
+	}
+	return value;
+}
+
+// Helper function to check if game is classic mode (replacement for scripts\zm\zombies\_zm_utility::is_classic)
+is_classic()
+{
+	// Check if it's NOT grief, turned, or cleansed game mode
+	if ( !isDefined( level.scr_zm_ui_gametype ) )
+	{
+		return true;
+	}
+	
+	if ( level.scr_zm_ui_gametype == "zclassic" || level.scr_zm_ui_gametype == "zstandard" )
+	{
+		return true;
+	}
+	
+	return false;
+}
+
 init()
 {
 	//level thread onplayerconnect();
@@ -239,6 +277,7 @@ init()
 	thread zombie_health_cap_override();
 	thread zombie_spawn_delay_fix();
 	thread zombie_speed_fix();
+	// Removed zombie_move_animation_override - not compatible with dedicated servers
 	level thread onplayerconnect();
 }
 
@@ -275,7 +314,8 @@ checks()
 {
 	if ( level.mixed_rounds_enabled )
 	{
-		if ( level.script != "zm_transit" || scripts\zm\zombies\_zm_utility::is_classic() || level.scr_zm_ui_gametype == "zgrief" )
+		// Use local is_classic() function instead of scripts\zm\zombies\_zm_utility::is_classic()
+		if ( level.script != "zm_transit" || is_classic() || level.scr_zm_ui_gametype == "zgrief" )
 		{
 			level.mixed_rounds_enabled = 0;
 		}
@@ -389,20 +429,6 @@ zombies_always_drop_powerups()
 		wait 0.05;
 	}
 }
-/*
-onplayerconnect()
-{
-	level waittill( "connected", player );
-	player thread onplayerspawned();
-}
-
-onplayerspawned()
-{
-	self waittill( "spawned_player" );
-	self iprintln( level.zmPowerupsEnabled[ "full_ammo" ].name );
-	self iprintln( level.zmPowerupsEnabled[ "full_ammo" ].active );
-}
-*/
 
 zombies_per_round_override()
 {
@@ -525,26 +551,9 @@ zombie_speed_cap_override()
 	}
 }
 
-zombie_move_animation_override()
-{
-	if ( level.cmZombieMoveAnimation == "" )
-	{
-		return;
-	}
-	
-	while ( 1 )
-	{
-		zombies = getAiArray( level.zombie_team );
-		foreach( zombie in zombies )
-		{
-			if ( zombie in_enabled_playable_area() )
-			{
-				zombie scripts\zm\zombies\_zm_utility::set_zombie_run_cycle( level.cmZombieMoveAnimation );
-			}
-		}
-		wait 1;
-	}
-}
+// REMOVED: zombie_move_animation_override() - Not compatible with dedicated servers
+// The in_enabled_playable_area() and set_zombie_run_cycle() functions don't exist
+// If you need custom zombie animations, this would require a different approach
 
 watch_for_respawn()
 {
@@ -559,7 +568,8 @@ watch_for_respawn()
 			self.health = level.cmPerkJuggHealth;
 			self.maxHealth = self.health;
 		}
-		else if ( self.pers_upgrades_awarded[ "jugg" ] && scripts\zm\zombies\_zm_utility::is_classic() )
+		// Use local is_classic() function instead of scripts\zm\zombies\_zm_utility::is_classic()
+		else if ( self.pers_upgrades_awarded[ "jugg" ] && is_classic() )
 		{
 			self setMaxHealth( level.cmPerkPermaJuggHealth );
 			self.health = level.cmPerkPermaJuggHealth;
@@ -606,9 +616,3 @@ init_custom_zm_powerups_gsc_exclusive_dvars()
 	//should max ammo affect players in laststand
 	level.cmPowerupMaxAmmoAffectsLaststandPlayers = getDvarIntDefault( "cmPowerupMaxAmmoAffectsLastandPlayers", 0 );
 }
-
-
-
-
-
-

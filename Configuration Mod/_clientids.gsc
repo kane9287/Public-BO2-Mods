@@ -1,7 +1,7 @@
-#include scripts\_utility;
+#include scripts\zm\_utility;
 #include common_scripts\utility;
-#include scripts\zombies\_zm_utility;
-#include scripts\zombies\_zm;
+#include scripts\zm\zombies\_zm_utility;
+#include scripts\zm\zombies\_zm;
 
 init()
 {
@@ -275,7 +275,7 @@ checks()
 {
 	if ( level.mixed_rounds_enabled )
 	{
-		if ( level.script != "zm_transit" || scripts\zombies\_zm_utility::is_classic() || level.scr_zm_ui_gametype == "zgrief" )
+		if ( level.script != "zm_transit" || scripts\zm\zombies\_zm_utility::is_classic() || level.scr_zm_ui_gametype == "zgrief" )
 		{
 			level.mixed_rounds_enabled = 0;
 		}
@@ -539,7 +539,7 @@ zombie_move_animation_override()
 		{
 			if ( zombie in_enabled_playable_area() )
 			{
-				zombie scripts\zombies\_zm_utility::set_zombie_run_cycle( level.cmZombieMoveAnimation );
+				zombie scripts\zm\zombies\_zm_utility::set_zombie_run_cycle( level.cmZombieMoveAnimation );
 			}
 		}
 		wait 1;
@@ -559,7 +559,7 @@ watch_for_respawn()
 			self.health = level.cmPerkJuggHealth;
 			self.maxHealth = self.health;
 		}
-		else if ( self.pers_upgrades_awarded[ "jugg" ] && scripts\zombies\_zm_utility::is_classic() )
+		else if ( self.pers_upgrades_awarded[ "jugg" ] && scripts\zm\zombies\_zm_utility::is_classic() )
 		{
 			self setMaxHealth( level.cmPerkPermaJuggHealth );
 			self.health = level.cmPerkPermaJuggHealth;

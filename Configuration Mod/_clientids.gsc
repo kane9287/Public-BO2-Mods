@@ -41,6 +41,12 @@ is_classic()
 	return false;
 }
 
+// Helper function to wait for network frame (replacement for internal wait_network_frame)
+wait_network_frame()
+{
+	wait 0.05;
+}
+
 init()
 {
 	//level thread onplayerconnect();

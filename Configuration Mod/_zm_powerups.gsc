@@ -1,24 +1,24 @@
-#include maps/mp/zombies/_zm_melee_weapon;
-#include maps/mp/zombies/_zm_weapons;
-#include maps/mp/zombies/_zm_perks;
-#include maps/mp/gametypes_zm/_hud_util;
-#include maps/mp/zombies/_zm_pers_upgrades_functions;
-#include maps/mp/zombies/_zm_spawner;
-#include maps/mp/animscripts/zm_death;
-#include maps/mp/zombies/_zm_score;
-#include maps/mp/zombies/_zm_powerups;
-#include maps/mp/zombies/_zm_blockers;
-#include maps/mp/zombies/_zm_audio_announcer;
-#include maps/mp/zombies/_zm_stats;
-#include maps/mp/zombies/_zm_pers_upgrades;
-#include maps/mp/zombies/_zm_laststand;
-#include maps/mp/_demo;
-#include maps/mp/zombies/_zm_magicbox;
-#include maps/mp/zombies/_zm_audio;
-#include maps/mp/zombies/_zm_net;
-#include maps/mp/zombies/_zm_utility;
-#include maps/mp/_utility;
-#include common_scripts/utility;
+#include scripts\zm\zombies\_zm_melee_weapon;
+#include scripts\zm\zombies\_zm_weapons;
+#include scripts\zm\zombies\_zm_perks;
+#include scripts\zm\_hud_util;
+#include scripts\zm\zombies\_zm_pers_upgrades_functions;
+#include scripts\zm\zombies\_zm_spawner;
+#include scripts\zm\animscripts\zm_death;
+#include scripts\zm\zombies\_zm_score;
+#include scripts\zm\zombies\_zm_powerups;
+#include scripts\zm\zombies\_zm_blockers;
+#include scripts\zm\zombies\_zm_audio_announcer;
+#include scripts\zm\zombies\_zm_stats;
+#include scripts\zm\zombies\_zm_pers_upgrades;
+#include scripts\zm\zombies\_zm_laststand;
+#include scripts\zm\_demo;
+#include scripts\zm\zombies\_zm_magicbox;
+#include scripts\zm\zombies\_zm_audio;
+#include scripts\zm\zombies\_zm_net;
+#include scripts\zm\_utility;
+#include scripts\zm\_utility;
+#include common_scripts\utility;
 
 init() //checked matches cerberus output
 {
@@ -505,7 +505,7 @@ powerup_drop( drop_point ) //checked partially changed to match cerberus output
 	}
 	playable_area = getentarray( "player_volume", "script_noteworthy" );
 	level.powerup_drop_count++;
-	powerup = maps/mp/zombies/_zm_net::network_safe_spawn( "powerup", 1, "script_model", drop_point + vectorScale( ( 0, 0, 1 ), 40 ) );
+	powerup = scripts\zm\zombies\_zm_net::network_safe_spawn( "powerup", 1, "script_model", drop_point + vectorScale( ( 0, 0, 1 ), 40 ) );
 	valid_drop = 0;
 	for ( i = 0; i < playable_area.size; i++ )
 	{
@@ -544,7 +544,7 @@ powerup_drop( drop_point ) //checked partially changed to match cerberus output
 
 specific_powerup_drop( powerup_name, drop_spot, powerup_team, powerup_location ) //checked partially changed to match cerberus output
 {
-	powerup = maps/mp/zombies/_zm_net::network_safe_spawn( "powerup", 1, "script_model", drop_spot + vectorScale( ( 0, 0, 1 ), 40 ) );
+	powerup = scripts\zm\zombies\_zm_net::network_safe_spawn( "powerup", 1, "script_model", drop_spot + vectorScale( ( 0, 0, 1 ), 40 ) );
 	level notify( "powerup_dropped" );
 	if ( isDefined( powerup ) )
 	{
@@ -602,7 +602,7 @@ quantum_bomb_random_powerup_result( position ) //changed to match cerberus outpu
 				arrayremovevalue( keys, keys[ index ] );
 				continue;
 			}
-			self thread maps/mp/zombies/_zm_audio::create_and_play_dialog( "kill", "quant_good" );
+			self thread scripts\zm\zombies\_zm_audio::create_and_play_dialog( "kill", "quant_good" );
 			[[ level.quantum_bomb_play_player_effect_at_position_func ]]( position );
 			level specific_powerup_drop( keys[ index ], position );
 			return;
@@ -626,7 +626,7 @@ quantum_bomb_random_zombie_grab_powerup_result( position ) //changed to match ce
 		index = randomint( keys.size );
 		if ( level.zombie_powerups[ keys[ index ] ].zombie_grabbable )
 		{
-			self thread maps/mp/zombies/_zm_audio::create_and_play_dialog( "kill", "quant_bad" );
+			self thread scripts\zm\zombies\_zm_audio::create_and_play_dialog( "kill", "quant_bad" );
 			[[ level.quantum_bomb_play_player_effect_at_position_func ]]( position );
 			level specific_powerup_drop( keys[ index ], position );
 			return;
@@ -640,7 +640,7 @@ quantum_bomb_random_zombie_grab_powerup_result( position ) //changed to match ce
 
 quantum_bomb_random_weapon_powerup_result( position ) //checked matches cerberus output
 {
-	self thread maps/mp/zombies/_zm_audio::create_and_play_dialog( "kill", "quant_good" );
+	self thread scripts\zm\zombies\_zm_audio::create_and_play_dialog( "kill", "quant_good" );
 	[[ level.quantum_bomb_play_player_effect_at_position_func ]]( position );
 	level specific_powerup_drop( "random_weapon", position );
 }
@@ -656,7 +656,7 @@ quantum_bomb_random_bonus_or_lose_points_powerup_result( position ) //checked ma
 			powerup = "lose_points_team";
 			if ( isDefined( level.zombie_include_powerups[ powerup ] ) )
 			{
-				self thread maps/mp/zombies/_zm_audio::create_and_play_dialog( "kill", "quant_bad" );
+				self thread scripts\zm\zombies\_zm_audio::create_and_play_dialog( "kill", "quant_bad" );
 				break;
 			}
 		case 2:
@@ -725,7 +725,7 @@ powerup_setup( powerup_override, powerup_team, powerup_location ) //checked part
 	if ( powerup == "random_weapon" )
 	{
 		players = get_players();
-		self.weapon = maps/mp/zombies/_zm_magicbox::treasure_chest_chooseweightedrandomweapon( players[ 0 ] );
+		self.weapon = scripts\zm\zombies\_zm_magicbox::treasure_chest_chooseweightedrandomweapon( players[ 0 ] );
 		self.base_weapon = self.weapon;
 		if ( !isDefined( level.random_weapon_powerups ) )
 		{
@@ -741,11 +741,11 @@ powerup_setup( powerup_override, powerup_team, powerup_location ) //checked part
 		self useweaponhidetags( self.weapon );
 		offsetdw = vectorScale( ( 1, 1, 1 ), 3 );
 		self.worldgundw = undefined;
-		if ( maps/mp/zombies/_zm_magicbox::weapon_is_dual_wield( self.weapon ) )
+		if ( scripts\zm\zombies\_zm_magicbox::weapon_is_dual_wield( self.weapon ) )
 		{
 			self.worldgundw = spawn( "script_model", self.origin + offsetdw );
 			self.worldgundw.angles = self.angles;
-			self.worldgundw setmodel( maps/mp/zombies/_zm_magicbox::get_left_hand_weapon_model_name( self.weapon ) );
+			self.worldgundw setmodel( scripts\zm\zombies\_zm_magicbox::get_left_hand_weapon_model_name( self.weapon ) );
 			self.worldgundw useweaponhidetags( self.weapon );
 			self.worldgundw linkto( self, "tag_weapon", offsetdw, ( 0, 0, 0 ) );
 		}
@@ -754,7 +754,7 @@ powerup_setup( powerup_override, powerup_team, powerup_location ) //checked part
 	{
 		self setmodel( struct.model_name );
 	}
-	maps/mp/_demo::bookmark( "zm_powerup_dropped", getTime(), undefined, undefined, 1 );
+	scripts\zm\_demo::bookmark( "zm_powerup_dropped", getTime(), undefined, undefined, 1 );
 	playsoundatposition( "zmb_spawn_powerup", self.origin );
 	if ( isDefined( powerup_team ) )
 	{
@@ -936,7 +936,7 @@ powerup_zombie_grab( powerup_team ) //checked changed to match cerberus output
 				}
 				break;
 		}
-		level thread maps/mp/zombies/_zm_audio::do_announcer_playvox( "powerup", self.powerup_name );
+		level thread scripts\zm\zombies\_zm_audio_announcer::do_announcer_playvox( "powerup", self.powerup_name );
 		wait 0.1;
 		playsoundatposition( "zmb_powerup_grabbed", self.origin );
 		self stoploopsound();
@@ -965,12 +965,12 @@ powerup_grab(powerup_team) //checked partially changed to match cerberus output
 		{
 			// Don't let them grab the minigun, tesla, or random weapon if they're downed or reviving
 			//	due to weapon switching issues.
-			if ( ( self.powerup_name == "minigun" || self.powerup_name == "tesla" ) && players[ i ] maps/mp/zombies/_zm_laststand::player_is_in_laststand() || players[ i ] maps/mp/zombies/_zm_laststand::player_is_in_laststand() && ( self.powerup_name == "random_weapon" || self.powerup_name == "meat_stink" ) || players[ i ] usebuttonpressed() && players[ i ] in_revive_trigger() )
+			if ( ( self.powerup_name == "minigun" || self.powerup_name == "tesla" ) && players[ i ] scripts\zm\zombies\_zm_laststand::player_is_in_laststand() || players[ i ] scripts\zm\zombies\_zm_laststand::player_is_in_laststand() && ( self.powerup_name == "random_weapon" || self.powerup_name == "meat_stink" ) || players[ i ] usebuttonpressed() && players[ i ] in_revive_trigger() )
 			{
 				i++;
 				continue;
 			}
-			if ( isdefined( self.can_pick_up_in_last_stand ) && !self.can_pick_up_in_last_stand && players[ i ] maps/mp/zombies/_zm_laststand::player_is_in_laststand() )
+			if ( isdefined( self.can_pick_up_in_last_stand ) && !self.can_pick_up_in_last_stand && players[ i ] scripts\zm\zombies\_zm_laststand::player_is_in_laststand() )
 			{
 				i++;
 				continue;
@@ -1020,7 +1020,7 @@ powerup_grab(powerup_team) //checked partially changed to match cerberus output
 					case "carpenter":
 						if ( is_classic() )
 						{
-							players[ i ] thread maps/mp/zombies/_zm_pers_upgrades::persistent_carpenter_ability_check();
+							players[ i ] thread scripts\zm\zombies\_zm_pers_upgrades::persistent_carpenter_ability_check();
 						}
 						if ( isdefined( level.use_new_carpenter_func ) )
 						{
@@ -1077,15 +1077,15 @@ powerup_grab(powerup_team) //checked partially changed to match cerberus output
 						break;	
 				}
 				
-				maps\mp\_demo::bookmark( "zm_player_powerup_grabbed", gettime(), players[ i ] );
+				scripts\zm\_demo::bookmark( "zm_player_powerup_grabbed", gettime(), players[ i ] );
 
 				if( should_award_stat ( self.powerup_name )) //don't do this for things that aren't really a powerup
 				{
 					//track # of picked up powerups/drops for the player
-					players[i] maps/mp/zombies/_zm_stats::increment_client_stat( "drops" );
-					players[i] maps/mp/zombies/_zm_stats::increment_player_stat( "drops" );
-					players[i] maps/mp/zombies/_zm_stats::increment_client_stat( self.powerup_name + "_pickedup" );
-					players[i] maps/mp/zombies/_zm_stats::increment_player_stat( self.powerup_name + "_pickedup" );
+					players[i] scripts\zm\zombies\_zm_stats::increment_client_stat( "drops" );
+					players[i] scripts\zm\zombies\_zm_stats::increment_player_stat( "drops" );
+					players[i] scripts\zm\zombies\_zm_stats::increment_client_stat( self.powerup_name + "_pickedup" );
+					players[i] scripts\zm\zombies\_zm_stats::increment_player_stat( self.powerup_name + "_pickedup" );
 				}
 				
 				if ( self.solo )
@@ -1146,7 +1146,7 @@ powerup_grab(powerup_team) //checked partially changed to match cerberus output
 						}
 					}
 				}
-				level thread maps/mp/zombies/_zm_audio_announcer::leaderdialog( self.powerup_name, self.power_up_grab_player.pers[ "team" ] );
+				level thread scripts\zm\zombies\_zm_audio_announcer::leaderdialog( self.powerup_name, self.power_up_grab_player.pers[ "team" ] );
 				self powerup_delete();
 				self notify( "powerup_grabbed" );
 			}
@@ -1166,7 +1166,7 @@ start_fire_sale( item ) //checked matches cerberus output
 	}
 	level notify( "powerup fire sale" );
 	level endon( "powerup fire sale" );
-	level thread maps/mp/zombies/_zm_audio_announcer::leaderdialog( "fire_sale" );
+	level thread scripts\zm\zombies\_zm_audio_announcer::leaderdialog( "fire_sale" );
 	level.zombie_vars[ "zombie_powerup_fire_sale_on" ] = 1;
 	level thread toggle_fire_sale_on();
 	level.zombie_vars[ "zombie_powerup_fire_sale_time" ] = level.cmPowerupFireSaleDuration;
@@ -1233,7 +1233,7 @@ start_carpenter( origin ) //checked partially changed to match cerberus output
 			{
 				break;
 			}
-			windows thread maps/mp/zombies/_zm_blockers::replace_chunk( windows, chunk, undefined, maps/mp/zombies/_zm_powerups::is_carpenter_boards_upgraded(), 1 );
+			windows thread scripts\zm\zombies\_zm_blockers::replace_chunk( windows, chunk, undefined, scripts\zm\zombies\_zm_powerups::is_carpenter_boards_upgraded(), 1 );
 			if ( isDefined( windows.clip ) )
 			{
 				windows.clip enable_trigger();
@@ -1251,7 +1251,7 @@ start_carpenter( origin ) //checked partially changed to match cerberus output
 	players = get_players();
 	for ( i = 0; i < players.size; i++ )
 	{
-		players[ i ] maps/mp/zombies/_zm_score::player_add_points( "carpenter_powerup", level.cmPowerupCarpenterPoints );
+		players[ i ] scripts\zm\zombies\_zm_score::player_add_points( "carpenter_powerup", level.cmPowerupCarpenterPoints );
 	}
 	carp_ent delete();
 }
@@ -1299,11 +1299,11 @@ powerup_vo( type ) //checked matches cerberus output
 	wait randomfloatrange( 2, 2.5 );
 	if ( type == "tesla" )
 	{
-		self maps/mp/zombies/_zm_audio::create_and_play_dialog( "weapon_pickup", type );
+		self scripts\zm\zombies\_zm_audio::create_and_play_dialog( "weapon_pickup", type );
 	}
 	else
 	{
-		self maps/mp/zombies/_zm_audio::create_and_play_dialog( "powerup", type );
+		self scripts\zm\zombies\_zm_audio::create_and_play_dialog( "powerup", type );
 	}
 	if ( isDefined( level.custom_powerup_vo_response ) )
 	{
@@ -1516,13 +1516,13 @@ nuke_powerup( drop_item, player_team ) //checked changed to match cerberus outpu
 		}
 		if ( i < 5 && !zombies_nuked[ i ].isdog )
 		{
-			zombies_nuked[ i ] thread maps/mp/animscripts/zm_death::flame_death_fx();
+			zombies_nuked[ i ] thread scripts\zm\animscripts\zm_death::flame_death_fx();
 		}
 		if ( !zombies_nuked[ i ].isdog )
 		{
 			if ( isdefined( zombies_nuked[ i ].no_gib ) && !zombies_nuked[ i ].no_gib )
 			{
-				zombies_nuked[ i ] maps/mp/zombies/_zm_spawner::zombie_head_gib();
+				zombies_nuked[ i ] scripts\zm\zombies\_zm_spawner::zombie_head_gib();
 			}
 			zombies_nuked[ i ] playsound("evt_nuked");
 		}
@@ -1532,7 +1532,7 @@ nuke_powerup( drop_item, player_team ) //checked changed to match cerberus outpu
 	players = get_players( player_team );
 	for ( i = 0; i < players.size; i++ )
 	{
-		players[ i ] maps/mp/zombies/_zm_score::player_add_points( "nuke_powerup", level.cmPowerupNukePoints );
+		players[ i ] scripts\zm\zombies\_zm_score::player_add_points( "nuke_powerup", level.cmPowerupNukePoints );
 	}
 }
 
@@ -1571,7 +1571,7 @@ double_points_powerup( drop_item, player ) //checked partially matches cerberus 
 	level thread point_doubler_on_hud( drop_item, team );
 	if ( isDefined( level.pers_upgrade_double_points ) && level.pers_upgrade_double_points )
 	{
-		player thread maps/mp/zombies/_zm_pers_upgrades_functions::pers_upgrade_double_points_pickup_start();
+		player thread scripts\zm\zombies\_zm_pers_upgrades_functions::pers_upgrade_double_points_pickup_start();
 	}
 	if ( isDefined( level.current_game_module ) && level.current_game_module == 2 )
 	{
@@ -1627,7 +1627,7 @@ full_ammo_powerup( drop_item, player ) //checked changed to match cerberus outpu
 	i = 0;
 	while ( i < players.size )
 	{
-		if ( players[ i ] maps/mp/zombies/_zm_laststand::player_is_in_laststand() && !level.cmPowerupMaxAmmoAffectsLaststandPlayers )
+		if ( players[ i ] scripts\zm\zombies\_zm_laststand::player_is_in_laststand() && !level.cmPowerupMaxAmmoAffectsLaststandPlayers )
 		{
 			i++;
 			continue;
@@ -1677,7 +1677,7 @@ insta_kill_powerup( drop_item, player ) //checked matches cerberus output
 	}
 	if ( is_classic() )
 	{
-		player thread maps/mp/zombies/_zm_pers_upgrades_functions::pers_upgrade_insta_kill_upgrade_check();
+		player thread scripts\zm\zombies\_zm_pers_upgrades_functions::pers_upgrade_insta_kill_upgrade_check();
 	}
 	team = player.team;
 	level thread insta_kill_on_hud( drop_item, team );
@@ -1720,7 +1720,7 @@ check_for_instakill( player, mod, hit_location ) //checked changed to match cerb
 		modname = remove_mod_from_methodofdeath( mod );
 		if ( isDefined( self.no_gib ) && self.no_gib )
 		{
-			self maps/mp/zombies/_zm_spawner::zombie_head_gib();
+			self scripts\zm\zombies\_zm_spawner::zombie_head_gib();
 		}
 		self.health = 1;
 		self dodamage( self.health + 666, self.origin, player, self, hit_location, modname );
@@ -1754,7 +1754,7 @@ check_for_instakill( player, mod, hit_location ) //checked changed to match cerb
 		}
 		else if (  isdefined( self.no_gib ) && !self.no_gib )
 		{
-			self maps/mp/zombies/_zm_spawner::zombie_head_gib();
+			self scripts\zm\zombies\_zm_spawner::zombie_head_gib();
 		}
 		self.health = 1;
 		self dodamage( self.health + 666, self.origin, player, self, hit_location, modname );
@@ -1858,7 +1858,7 @@ toggle_fire_sale_on() //checked partially matches cerberus output did not change
 					level.chests[ i ].was_temp = 1;
 					if ( is_true( level.chests[ i ].hidden ) )
 					{
-						level.chests[ i ] thread maps/mp/zombies/_zm_magicbox::show_chest();
+						level.chests[ i ] thread scripts\zm\zombies\_zm_magicbox::show_chest();
 					}
 					wait_network_frame();
 				}
@@ -1912,7 +1912,7 @@ remove_temp_chest( chest_index ) //checked partially matches cerberus output did
 	level.chests[ chest_index ].zbarrier playsound( "zmb_box_poof_land" );
 	level.chests[ chest_index ].zbarrier playsound( "zmb_couch_slam" );
 	wait_network_frame();
-	level.chests[ chest_index ] maps/mp/zombies/_zm_magicbox::hide_chest();
+	level.chests[ chest_index ] scripts\zm\zombies\_zm_magicbox::hide_chest();
 }
 
 devil_dialog_delay() //checked matches cerberus output
@@ -1923,8 +1923,8 @@ devil_dialog_delay() //checked matches cerberus output
 full_ammo_on_hud( drop_item, player_team ) //checked matches cerberus output
 {
 	self endon( "disconnect" );
-	hudelem = maps/mp/gametypes_zm/_hud_util::createserverfontstring( "objective", 2, player_team );
-	hudelem maps/mp/gametypes_zm/_hud_util::setpoint( "TOP", undefined, 0, level.zombie_vars[ "zombie_timer_offset" ] - ( level.zombie_vars[ "zombie_timer_offset_interval" ] * 2 ) );
+	hudelem = scripts\zm\_hud_util::createserverfontstring( "objective", 2, player_team );
+	hudelem scripts\zm\_hud_util::setpoint( "TOP", undefined, 0, level.zombie_vars[ "zombie_timer_offset" ] - ( level.zombie_vars[ "zombie_timer_offset_interval" ] * 2 ) );
 	hudelem.sort = 0.5;
 	hudelem.alpha = 0;
 	hudelem fadeovertime( 0.5 );
@@ -2044,16 +2044,16 @@ free_perk_powerup( item ) //checked changed to match cerberus output
 	players = get_players();
 	for ( i = 0; i < players.size; i++ )
 	{
-		if ( !players[ i ] maps/mp/zombies/_zm_laststand::player_is_in_laststand() && players[ i ].sessionstate != "spectator" )
+		if ( !players[ i ] scripts\zm\zombies\_zm_laststand::player_is_in_laststand() && players[ i ].sessionstate != "spectator" )
 		{
 			player = players[ i ];
 			if ( isDefined( item.ghost_powerup ) )
 			{
-				player maps/mp/zombies/_zm_stats::increment_client_stat( "buried_ghost_perk_acquired", 0 );
-				player maps/mp/zombies/_zm_stats::increment_player_stat( "buried_ghost_perk_acquired" );
+				player scripts\zm\zombies\_zm_stats::increment_client_stat( "buried_ghost_perk_acquired", 0 );
+				player scripts\zm\zombies\_zm_stats::increment_player_stat( "buried_ghost_perk_acquired" );
 				player notify( "player_received_ghost_round_free_perk" );
 			}
-			free_perk = player maps/mp/zombies/_zm_perks::give_random_perk();
+			free_perk = player scripts\zm\zombies\_zm_perks::give_random_perk();
 			if ( isDefined( level.disable_free_perks_before_power ) && level.disable_free_perks_before_power )
 			{
 				player thread disable_perk_before_power( free_perk );
@@ -2091,7 +2091,7 @@ random_weapon_powerup_throttle() //checked matches cerberus output
 
 random_weapon_powerup( item, player ) //checked partially matches cerberus output did not change
 {
-	if ( player.sessionstate == "spectator" || player maps/mp/zombies/_zm_laststand::player_is_in_laststand() )
+	if ( player.sessionstate == "spectator" || player scripts\zm\zombies\_zm_laststand::player_is_in_laststand() )
 	{
 		return 0;
 	}
@@ -2107,7 +2107,7 @@ random_weapon_powerup( item, player ) //checked partially matches cerberus outpu
 		{
 			return 0;
 		}
-		if ( !isDefined( level.zombie_weapons[ current_weapon ] ) && !maps/mp/zombies/_zm_weapons::is_weapon_upgraded( current_weapon ) && current_weapon_type != "altmode" )
+		if ( !isDefined( level.zombie_weapons[ current_weapon ] ) && !scripts\zm\zombies\_zm_weapons::is_weapon_upgraded( current_weapon ) && current_weapon_type != "altmode" )
 		{
 			return 0;
 		}
@@ -2116,16 +2116,16 @@ random_weapon_powerup( item, player ) //checked partially matches cerberus outpu
 	weapon_string = item.weapon;
 	if ( weapon_string == "knife_ballistic_zm" )
 	{
-		weapon = player maps/mp/zombies/_zm_melee_weapon::give_ballistic_knife( weapon_string, 0 );
+		weapon = player scripts\zm\zombies\_zm_melee_weapon::give_ballistic_knife( weapon_string, 0 );
 	}
 	else
 	{
 		if ( weapon_string == "knife_ballistic_upgraded_zm" )
 		{
-			weapon = player maps/mp/zombies/_zm_melee_weapon::give_ballistic_knife( weapon_string, 1 );
+			weapon = player scripts\zm\zombies\_zm_melee_weapon::give_ballistic_knife( weapon_string, 1 );
 		}
 	}
-	player thread maps/mp/zombies/_zm_weapons::weapon_give( weapon_string );
+	player thread scripts\zm\zombies\_zm_weapons::weapon_give( weapon_string );
 	return 1;
 }
 
@@ -2136,9 +2136,9 @@ bonus_points_player_powerup( item, player ) //checked matches cerberus output
 	{
 		points = [[ level.bonus_points_powerup_override ]]();
 	}
-	if ( !player maps/mp/zombies/_zm_laststand::player_is_in_laststand() && player.sessionstate != "spectator" )
+	if ( !player scripts\zm\zombies\_zm_laststand::player_is_in_laststand() && player.sessionstate != "spectator" )
 	{
-		player maps/mp/zombies/_zm_score::player_add_points( "bonus_points_powerup", points );
+		player scripts\zm\zombies\_zm_score::player_add_points( "bonus_points_powerup", points );
 	}
 }
 
@@ -2152,9 +2152,9 @@ bonus_points_team_powerup( item ) //checked changed to match cerberus output
 	players = get_players();
 	for ( i = 0; i < players.size; i++ )
 	{
-		if ( !players[ i ] maps/mp/zombies/_zm_laststand::player_is_in_laststand() && players[ i ].sessionstate != "spectator" )
+		if ( !players[ i ] scripts\zm\zombies\_zm_laststand::player_is_in_laststand() && players[ i ].sessionstate != "spectator" )
 		{
-			players[ i ] maps/mp/zombies/_zm_score::player_add_points( "bonus_points_powerup", points );
+			players[ i ] scripts\zm\zombies\_zm_score::player_add_points( "bonus_points_powerup", points );
 		}
 	}
 }
@@ -2166,17 +2166,17 @@ lose_points_team_powerup( item ) //checked partially changed to match cerberus o
 	i = 0;
 	while ( i < players.size )
 	{
-		if ( !players[ i ] maps/mp/zombies/_zm_laststand::player_is_in_laststand() && players[ i ].sessionstate != "spectator" )
+		if ( !players[ i ] scripts\zm\zombies\_zm_laststand::player_is_in_laststand() && players[ i ].sessionstate != "spectator" )
 		{
 			if ( ( players[ i ].score - points ) <= 0 )
 			{
-				players[ i ] maps/mp/zombies/_zm_score::minus_to_player_score( players[ i ].score );
+				players[ i ] scripts\zm\zombies\_zm_score::minus_to_player_score( players[ i ].score );
 				i++;
 				continue;
 			}
 			else
 			{
-				players[ i ] maps/mp/zombies/_zm_score::minus_to_player_score( points );
+				players[ i ] scripts\zm\zombies\_zm_score::minus_to_player_score( points );
 			}
 		}
 		i++;
@@ -2189,9 +2189,9 @@ lose_perk_powerup( item ) //checked partially matches cerberus output
 	for ( i = 0; i < players.size; i++ )
 	{
 		player = players[ i ];
-		if ( !player maps/mp/zombies/_zm_laststand::player_is_in_laststand() && player.sessionstate != "spectator" )
+		if ( !player scripts\zm\zombies\_zm_laststand::player_is_in_laststand() && player.sessionstate != "spectator" )
 		{
-			player maps/mp/zombies/_zm_perks::lose_random_perk();
+			player scripts\zm\zombies\_zm_perks::lose_random_perk();
 		}
 	}
 }
@@ -2202,7 +2202,7 @@ empty_clip_powerup( item ) //checked partially matches cerberus output
 	for ( i = 0; i < players.size; i++ )
 	{
 		player = players[ i ];
-		if ( !player maps/mp/zombies/_zm_laststand::player_is_in_laststand() && player.sessionstate != "spectator" )
+		if ( !player scripts\zm\zombies\_zm_laststand::player_is_in_laststand() && player.sessionstate != "spectator" )
 		{
 			weapon = player getcurrentweapon();
 			player setweaponammoclip( weapon, 0 );
@@ -2561,7 +2561,7 @@ start_carpenter_new( origin ) //checked partially changed to match cerberus outp
 	carp_ent playloopsound( "evt_carpenter" );
 	boards_near_players = get_near_boards( window_boards );
 	boards_far_from_players = get_far_boards( window_boards );
-	level repair_far_boards( boards_far_from_players, maps/mp/zombies/_zm_powerups::is_carpenter_boards_upgraded() );
+	level repair_far_boards( boards_far_from_players, scripts\zm\zombies\_zm_powerups::is_carpenter_boards_upgraded() );
 
 	i = 0;
 	while ( i < boards_near_players.size )
@@ -2580,7 +2580,7 @@ start_carpenter_new( origin ) //checked partially changed to match cerberus outp
 			{
 				break;
 			}
-			window thread maps/mp/zombies/_zm_blockers::replace_chunk( window, chunk, undefined, maps/mp/zombies/_zm_powerups::is_carpenter_boards_upgraded(), 1 );
+			window thread scripts\zm\zombies\_zm_blockers::replace_chunk( window, chunk, undefined, scripts\zm\zombies\_zm_powerups::is_carpenter_boards_upgraded(), 1 );
 			last_repaired_chunk = chunk;
 			if ( isDefined( window.clip ) )
 			{
@@ -2626,7 +2626,7 @@ start_carpenter_new( origin ) //checked partially changed to match cerberus outp
 	players = get_players();
 	for ( i = 0; i < players.size; i++ )
 	{
-		players[ i ] maps/mp/zombies/_zm_score::player_add_points( "carpenter_powerup", 200 );
+		players[ i ] scripts\zm\zombies\_zm_score::player_add_points( "carpenter_powerup", 200 );
 	}
 	carp_ent delete();
 	level notify( "carpenter_finished" );
@@ -2870,7 +2870,7 @@ should_award_stat( powerup_name ) //checked changed to matched cerberus output
 
 teller_withdrawl( powerup, player ) //checked matches cerberus output
 {
-	player maps/mp/zombies/_zm_score::add_to_player_score( powerup.value );
+	player scripts\zm\zombies\_zm_score::add_to_player_score( powerup.value );
 }
 
 

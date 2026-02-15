@@ -3,27 +3,6 @@
 #include scripts\zm\zombies\_zm_utility;
 #include scripts\zm\zombies\_zm;
 
-// Helper functions for dvar defaults since getDvarIntDefault doesn't exist on dedicated servers
-getDvarIntDefault( dvarName, defaultValue )
-{
-	value = getDvarInt( dvarName );
-	if ( !isDefined( value ) || value == 0 && getDvar( dvarName ) == "" )
-	{
-		return defaultValue;
-	}
-	return value;
-}
-
-getDvarFloatDefault( dvarName, defaultValue )
-{
-	value = getDvarFloat( dvarName );
-	if ( !isDefined( value ) || value == 0 && getDvar( dvarName ) == "" )
-	{
-		return defaultValue;
-	}
-	return value;
-}
-
 init()
 {
 	//level thread onplayerconnect();
@@ -627,7 +606,6 @@ init_custom_zm_powerups_gsc_exclusive_dvars()
 	//should max ammo affect players in laststand
 	level.cmPowerupMaxAmmoAffectsLaststandPlayers = getDvarIntDefault( "cmPowerupMaxAmmoAffectsLastandPlayers", 0 );
 }
-
 
 
 
